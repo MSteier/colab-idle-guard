@@ -14,6 +14,9 @@ the runtime with Colab's own *Disconnect and delete runtime*.
 > runtime from using compute units. Automatic release is **off by default**.
 > See [docs/COLAB_RUNTIME_RESEARCH.md](docs/COLAB_RUNTIME_RESEARCH.md).
 
+> **Unofficial project.** Not affiliated with, endorsed by, or supported by
+> Google. "Colab" and "Google Colaboratory" are trademarks of Google LLC.
+
 ## Features
 
 - One idle timer shared by Chrome and VS Code. Only Colab interaction resets
@@ -84,3 +87,14 @@ powershell -ExecutionPolicy Bypass -File scripts\build.ps1   # exe, extensions, 
 
 Run from source: `.venv\Scripts\pythonw.exe run_colab_idle_guard.pyw`
 (`python -m colab_idle_guard --headless` runs the watchdog without the tray).
+
+> **Launch with the venv's Python.** Double-clicking `run_colab_idle_guard.pyw`
+> uses whatever Python Windows has as its default, which won't have the
+> project's packages and fails with `No module named 'pystray'`. Use the
+> command above, or a shortcut whose target is
+> `"<project>\.venv\Scripts\pythonw.exe" "<project>\run_colab_idle_guard.pyw"`
+> with **Start in** set to the project folder.
+>
+> When run from a console with `python.exe`, a
+> `ConnectionResetError: [WinError 10054]` traceback is harmless: an extension
+> closed its connection to the local server early, and the app keeps running.
