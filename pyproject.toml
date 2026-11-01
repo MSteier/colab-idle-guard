@@ -1,0 +1,8 @@
+[project]
+name = "colab-idle-guard"
+version = "0.1.0"
+description = "Releases idle Google Colab runtimes on Windows after a period of Colab inactivity."
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

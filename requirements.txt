@@ -1,0 +1,3 @@
+# Runtime dependencies (kept deliberately minimal; see docs/ARCHITECTURE.md ADR-5)
+pystray>=0.19.5
+Pillow>=10.4

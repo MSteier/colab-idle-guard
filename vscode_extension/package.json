@@ -1,0 +1,65 @@
+{
+  "name": "colab-idle-guard",
+  "displayName": "Colab Idle Guard",
+  "description": "Reports Colab notebook activity and kernel execution state to the local Colab Idle Guard app so idle Colab runtimes can be released.",
+  "version": "0.1.0",
+  "publisher": "colab-idle-guard",
+  "license": "UNLICENSED",
+  "private": true,
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": ["Notebooks", "Other"],
+  "extensionDependencies": ["ms-toolsai.jupyter"],
+  "activationEvents": ["onStartupFinished", "onNotebook:jupyter-notebook"],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      { "command": "colabIdleGuard.pair", "title": "Pair with Colab Idle Guard app", "category": "Colab Idle Guard" },
+      { "command": "colabIdleGuard.showStatus", "title": "Show status", "category": "Colab Idle Guard" },
+      { "command": "colabIdleGuard.markColab", "title": "Treat this notebook as a Colab notebook", "category": "Colab Idle Guard" },
+      { "command": "colabIdleGuard.unmarkColab", "title": "Stop treating this notebook as a Colab notebook", "category": "Colab Idle Guard" },
+      { "command": "colabIdleGuard.redetect", "title": "Re-check whether this notebook runs on Colab", "category": "Colab Idle Guard" }
+    ],
+    "configuration": {
+      "title": "Colab Idle Guard",
+      "properties": {
+        "colabIdleGuard.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Report Colab notebook activity and execution state to the local Colab Idle Guard app."
+        },
+        "colabIdleGuard.port": {
+          "type": "integer",
+          "default": 47821,
+          "minimum": 1024,
+          "maximum": 65535,
+          "description": "Port of the Colab Idle Guard app on 127.0.0.1."
+        },
+        "colabIdleGuard.detection": {
+          "type": "string",
+          "enum": ["auto", "manual"],
+          "enumDescriptions": [
+            "Check once per kernel session, by running a read-only one-line probe in the kernel, whether the kernel runs on a Colab runtime.",
+            "Only notebooks marked with 'Treat this notebook as a Colab notebook' are monitored."
+          ],
+          "default": "auto",
+          "description": "How to decide whether a notebook is connected to a Colab runtime."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test": "tsc -p ./ && node --test \"out/test/*.test.js\"",
+    "package": "vsce package --no-dependencies --skip-license --allow-missing-repository"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/vscode": "~1.95.0",
+    "@vscode/jupyter-extension": "^1.1.1",
+    "@vscode/vsce": "^3.2.0",
+    "typescript": "^5.6.0"
+  }
+}

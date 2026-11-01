@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+build/
+dist/
+release/
+vscode_extension/node_modules/
+vscode_extension/out/
+*.vsix
+.pytest_cache/
+.coverage
+.mypy_cache/

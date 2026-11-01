@@ -1,0 +1,51 @@
+{
+  "manifest_version": 3,
+  "name": "Colab Idle Guard",
+  "version": "0.1.0",
+  "description": "Reports Google Colab activity and cell-execution state to the local Colab Idle Guard app so idle GPU runtimes can be released.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtDfTReIaUVnWpjt8wVx83fRysVdzX9pkKLqOQU+jf9xadyftYdKxyjokdWd4TvqW1y5ONh/SNAngpIP6ipNkLHKdEeb6XTfGLfL0BtWUYyb13lAY5Ay7Bgnq+Yv+bM3WftwWpWdNnOadph9vAsemcbGp3yOkbK+vd25fNsBuWyn4ZTJjA9zcd5X/1QEB/I1xNvg/ymW3bKeu/yf/Yte0ezlGVXbifBKBnG9hx1NqnXhdN5lHpGjkNb2fgxOIJlruc8EQzV0WzuBFg4mpwlf/4zJ8cJc3kGa35wIPtieT6Jg21H++NGoB/O0e1wJVppzhc8GH/N9C9UTuv/ScylRT9QIDAQAB",
+  "minimum_chrome_version": "116",
+  "permissions": [
+    "storage",
+    "alarms"
+  ],
+  "host_permissions": [
+    "http://127.0.0.1/*"
+  ],
+  "background": {
+    "service_worker": "service_worker.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://colab.research.google.com/*"
+      ],
+      "js": [
+        "content/kernel_hook.js"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN",
+      "all_frames": false
+    },
+    {
+      "matches": [
+        "https://colab.research.google.com/*"
+      ],
+      "js": [
+        "content/colab_probe.js",
+        "content/content.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": false
+    }
+  ],
+  "action": {
+    "default_title": "Colab Idle Guard",
+    "default_popup": "ui/popup.html"
+  },
+  "options_ui": {
+    "page": "ui/options.html",
+    "open_in_tab": true
+  }
+}

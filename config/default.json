@@ -1,0 +1,21 @@
+{
+  "idle_timeout_minutes": 30,
+  "warning_countdown_seconds": 60,
+  "monitor_chrome": true,
+  "monitor_vscode": true,
+  "protect_running_cells": true,
+  "require_verified_execution_state": true,
+  "automatic_disconnect_enabled": false,
+  "release_consent_acknowledged": false,
+  "start_with_windows": false,
+  "notifications_enabled": true,
+  "log_level": "INFO",
+  "api_port": 47821,
+  "heartbeat_interval_seconds": 15,
+  "integration_timeout_seconds": 60,
+  "telemetry_fresh_seconds": 45,
+  "stale_verification_max_minutes": 10,
+  "idle_timer_starts_after_execution": true,
+  "require_foreground_corroboration": true,
+  "allowed_chrome_extension_ids": []
+}
