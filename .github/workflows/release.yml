@@ -34,7 +34,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"   # node --test needs 22+ to expand the *.test.* patterns
           cache: npm
           cache-dependency-path: vscode_extension/package-lock.json
 
