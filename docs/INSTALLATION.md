@@ -101,6 +101,17 @@ the full source) with its SHA-256. The PDF is rendered with Google Chrome in
 headless mode. Switches: `-SkipTests`, `-SkipExe`, `-SkipExtensions`,
 `-SkipManual`, `-SkipZip`.
 
+### Automated builds (GitHub Actions)
+
+`.github/workflows/release.yml` runs the same `build.ps1` on a GitHub-hosted
+Windows machine, so no local build environment is needed.
+
+- **Publish a release:** bump `__version__` in `colab_idle_guard/__init__.py`,
+  commit, then push a matching tag (`git tag v0.1.0; git push origin v0.1.0`).
+  The release ZIP and its `.sha256` are attached to a new GitHub Release.
+- **Test build only:** Actions tab → *Build release* → *Run workflow*. The
+  ZIP is kept as a downloadable workflow artifact; nothing is published.
+
 ## File locations
 
 | What | Where |
