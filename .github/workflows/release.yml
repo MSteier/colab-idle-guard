@@ -1,0 +1,73 @@
+# Builds the Windows release on GitHub's Windows machines and publishes it.
+#
+#   Push a tag like v0.1.0  -> full build + a GitHub Release with the ZIP attached.
+#   "Run workflow" button   -> same build, ZIP kept as a downloadable workflow artifact only.
+#
+# The tag must match __version__ in colab_idle_guard/__init__.py.
+
+name: Build release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write   # needed to create the GitHub Release
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Install Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: vscode_extension/package-lock.json
+
+      # build.ps1 expects a .venv in the repo root, same as on your PC.
+      - name: Create the Python environment
+        run: |
+          python -m venv .venv
+          .venv\Scripts\python -m pip install --upgrade pip
+          .venv\Scripts\pip install -r requirements-dev.txt
+
+      - name: Install VS Code extension dependencies
+        working-directory: vscode_extension
+        run: npm ci
+
+      - name: Check the tag matches the app version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          $version = (.venv\Scripts\python -c "import colab_idle_guard; print(colab_idle_guard.__version__)").Trim()
+          $tag = "${{ github.ref_name }}".TrimStart("v")
+          if ($tag -ne $version) { throw "Tag v$tag does not match __version__ $version" }
+
+      # Tests, exe (PyInstaller), .vsix, Chrome extension ZIP, PDF manual, release ZIP + SHA-256.
+      - name: Build
+        run: powershell -ExecutionPolicy Bypass -File scripts\build.ps1
+
+      - name: Keep the build as a workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: colab-idle-guard-release
+          path: release/*
+
+      - name: Publish the GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "${{ github.ref_name }}" (Get-ChildItem release\*) --title "Colab Idle Guard ${{ github.ref_name }}" --generate-notes
