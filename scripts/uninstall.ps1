@@ -53,6 +53,8 @@ if (-not $NoRegister) {
 }
 
 if (-not $KeepVSCodeExtension -and (Get-Command code -ErrorAction SilentlyContinue)) {
+    & code --uninstall-extension mist-technologies.colab-idle-guard 2>$null | Out-Null
+    # Older builds were published under the "colab-idle-guard" publisher ID.
     & code --uninstall-extension colab-idle-guard.colab-idle-guard 2>$null | Out-Null
     if ($LASTEXITCODE -eq 0) { Write-Host "VS Code extension removed." }
 }

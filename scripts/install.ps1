@@ -95,7 +95,7 @@ if (-not $NoRegister) {
     New-Item -Path $key -Force | Out-Null
     $uninstall = "powershell.exe -NoProfile -ExecutionPolicy Bypass -File `"$(Join-Path $InstallDir 'uninstall.ps1')`""
     $values = @{
-        DisplayName = $AppName; DisplayVersion = $Version; Publisher = "Colab Idle Guard"
+        DisplayName = $AppName; DisplayVersion = $Version; Publisher = "Mist Technologies"
         InstallLocation = $InstallDir; DisplayIcon = $Exe; UninstallString = $uninstall
     }
     foreach ($k in $values.Keys) { Set-ItemProperty -Path $key -Name $k -Value $values[$k] }
@@ -111,6 +111,8 @@ if (-not $SkipVSCode) {
     } elseif (-not $code) {
         Write-Warning "'code' command not found; install $($Vsix.Name) manually (VS Code > Extensions > ... > Install from VSIX)."
     } else {
+        # Remove the copy published under the old "colab-idle-guard" publisher ID, if present.
+        & code --uninstall-extension colab-idle-guard.colab-idle-guard 2>$null | Out-Null
         & code --install-extension $Vsix.FullName --force 2>$null | Out-Null
         if ($LASTEXITCODE -eq 0) { Write-Host "VS Code extension installed (reload VS Code windows to activate)." }
         else { Write-Warning "VS Code extension install failed; install $($Vsix.Name) manually." }
