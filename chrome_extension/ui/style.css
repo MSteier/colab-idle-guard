@@ -40,3 +40,4 @@ td { padding: 3px 0; vertical-align: top; }
 td:first-child { color: var(--muted); width: 45%; }
 .page { max-width: 560px; margin: 32px auto; padding: 0 16px; }
 .popup { width: 300px; padding: 14px; }
+.publisher { margin: 14px 0 0; padding-top: 8px; border-top: 1px solid var(--border); color: var(--muted); font-size: 11px; }

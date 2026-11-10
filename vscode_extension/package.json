@@ -3,7 +3,10 @@
   "displayName": "Colab Idle Guard",
   "description": "Reports Colab notebook activity and kernel execution state to the local Colab Idle Guard app so idle Colab runtimes can be released.",
   "version": "0.1.0",
-  "publisher": "colab-idle-guard",
+  "publisher": "mist-technologies",
+  "author": {
+    "name": "Mist Technologies"
+  },
   "license": "UNLICENSED",
   "private": true,
   "engines": {
