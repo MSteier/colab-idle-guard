@@ -264,10 +264,11 @@ def test_12_restart_preserves_config_and_reevaluates_state(tmp_path: Path) -> No
         second.stop()
 
 
-def test_official_extension_id_always_accepted(service: WatchdogService, client: Client) -> None:
-    from colab_idle_guard.watchdog.api_server import OFFICIAL_CHROME_EXTENSION_ID
+@pytest.mark.parametrize("which", ["store", "dev"])
+def test_official_extension_ids_always_accepted(service: WatchdogService, client: Client, which: str) -> None:
+    from colab_idle_guard.watchdog.api_server import DEV_CHROME_EXTENSION_ID, STORE_CHROME_EXTENSION_ID
 
-    official = f"chrome-extension://{OFFICIAL_CHROME_EXTENSION_ID}"
+    official = f"chrome-extension://{STORE_CHROME_EXTENSION_ID if which == 'store' else DEV_CHROME_EXTENSION_ID}"
     assert client.call("POST", "/v1/hello", hb(), origin=f"chrome-extension://{EXT_A}")[0] == 200  # pins EXT_A
     assert client.call("POST", "/v1/hello", hb(instance="c2"), origin=official)[0] == 200
     assert service.config.get("allowed_chrome_extension_ids") == [EXT_A]  # official ID is not pinned
@@ -275,11 +276,11 @@ def test_official_extension_id_always_accepted(service: WatchdogService, client:
     assert client.call("POST", "/v1/hello", hb(), origin=official, token=False)[0] == 401  # token still required
 
 
-def test_manifest_key_matches_official_id() -> None:
+def test_manifest_key_matches_dev_id() -> None:
     import base64
     import hashlib
-    from colab_idle_guard.watchdog.api_server import OFFICIAL_CHROME_EXTENSION_ID
+    from colab_idle_guard.watchdog.api_server import DEV_CHROME_EXTENSION_ID
 
     manifest = json.loads((Path(__file__).resolve().parents[1] / "chrome_extension" / "manifest.json").read_text())
     digest = hashlib.sha256(base64.b64decode(manifest["key"])).hexdigest()[:32]
-    assert digest.translate(str.maketrans("0123456789abcdef", "abcdefghijklmnop")) == OFFICIAL_CHROME_EXTENSION_ID
+    assert digest.translate(str.maketrans("0123456789abcdef", "abcdefghijklmnop")) == DEV_CHROME_EXTENSION_ID

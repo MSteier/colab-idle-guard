@@ -40,8 +40,9 @@ The app's HTTP API exists only for the two extensions.
   `127.0.0.1:<port>` or `localhost:<port>`.
 - **No web access:** requests with a web `Origin` are refused, CORS preflight
   is always denied, and no CORS headers are sent. Only `chrome-extension://`
-  origins are accepted: the official extension ID
-  (`glchpgialnkmebkjemimjgfijpnkdcdi`, fixed by the manifest key) or one
+  origins are accepted: the official extension IDs (Chrome Web Store
+  `cdaoahfjdffnggocmebncgoplafbafbk`, and the development ID
+  `glchpgialnkmebkjemimjgfijpnkdcdi` fixed by the manifest key) or one
   pinned custom ID (first authenticated use; reset in Settings).
 - **Input validation:** JSON only, 64 KiB maximum, strict field types and
   ranges, identifier patterns, at most 200 events / 50 notebooks per request.

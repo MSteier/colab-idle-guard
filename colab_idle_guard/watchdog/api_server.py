@@ -40,10 +40,14 @@ MAX_EVENTS = 200
 MAX_NOTEBOOKS = 50
 _ID_RE = re.compile(r"^[A-Za-z0-9_.:-]{1,128}$")
 _EXT_ID_RE = re.compile(r"^[a-p]{32}$")
-# ID of the official Chrome extension, fixed by the public "key" in its manifest
-# (the same whatever folder it is loaded from). Always accepted; any other
-# extension ID must be pinned (first authenticated use, or the configuration).
-OFFICIAL_CHROME_EXTENSION_ID = "glchpgialnkmebkjemimjgfijpnkdcdi"
+# Official Chrome extension IDs. Always accepted; any other extension ID must be
+# pinned (first authenticated use, or the configuration).
+# - STORE: the ID the Chrome Web Store assigned to the published listing.
+# - DEV: fixed by the public "key" in chrome_extension/manifest.json, so an
+#   unpacked development copy has the same ID whatever folder it is loaded from.
+STORE_CHROME_EXTENSION_ID = "cdaoahfjdffnggocmebncgoplafbafbk"
+DEV_CHROME_EXTENSION_ID = "glchpgialnkmebkjemimjgfijpnkdcdi"
+OFFICIAL_CHROME_EXTENSION_IDS = frozenset({STORE_CHROME_EXTENSION_ID, DEV_CHROME_EXTENSION_ID})
 
 
 class RequestError(Exception):
@@ -196,7 +200,7 @@ class _Handler(BaseHTTPRequestHandler):
         ext_id = origin[len("chrome-extension://"):].rstrip("/")
         if not _EXT_ID_RE.match(ext_id):
             raise RequestError(HTTPStatus.FORBIDDEN, "origin not allowed")
-        if ext_id == OFFICIAL_CHROME_EXTENSION_ID:
+        if ext_id in OFFICIAL_CHROME_EXTENSION_IDS:
             return
         allowed = self.server.ctx.config.get("allowed_chrome_extension_ids")
         if allowed and ext_id not in allowed:
@@ -212,7 +216,7 @@ class _Handler(BaseHTTPRequestHandler):
             return
         ext_id = origin[len("chrome-extension://"):].rstrip("/")
         cfg = self.server.ctx.config
-        if ext_id != OFFICIAL_CHROME_EXTENSION_ID and not cfg.get("allowed_chrome_extension_ids"):
+        if ext_id not in OFFICIAL_CHROME_EXTENSION_IDS and not cfg.get("allowed_chrome_extension_ids"):
             cfg.update({"allowed_chrome_extension_ids": [ext_id]})
             log_event(log, "chrome_extension_pinned", extension_id=ext_id)
 

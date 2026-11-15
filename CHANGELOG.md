@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.1.2] - 2026-11-15
+### Changed
+- The app now accepts the Chrome Web Store extension ID
+  (`cdaoahfjdffnggocmebncgoplafbafbk`) as official, alongside the development
+  ID fixed by the manifest key, so the store version pairs without "Forget".
+
+## [0.1.1] - 2026-11-11 (Chrome extension)
+### Added
+- Mist Technologies phoenix icon (black and white) for the toolbar, the
+  extensions page and the Chrome Web Store, replacing Chrome's default letter icon.
+
 ## [0.1.0] - 2026-10-31
 ### Added
 - Phase 8: packaging and documentation:

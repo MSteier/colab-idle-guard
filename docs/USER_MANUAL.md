@@ -127,8 +127,10 @@ no other program or website can send it fake activity or commands.
     3. Click **Save and test**. You should see *"Paired with Colab Idle Guard
        0.1.0."*
 
-Only the official Colab Idle Guard extension is accepted. It has a fixed ID
-(`glchpgialnkmebkjemimjgfijpnkdcdi`) whichever folder you load it from. If you
+Only the official Colab Idle Guard extension is accepted: the Chrome Web
+Store version (ID `cdaoahfjdffnggocmebncgoplafbafbk`) or the development copy
+loaded unpacked from this repository (ID `glchpgialnkmebkjemimjgfijpnkdcdi`,
+the same whichever folder you load it from). If you
 load a modified copy, which gets a different ID, the first one to pair is
 remembered and others are refused; **tray → Settings… → Forget** lets another
 one pair. Reinstalling or moving the extension clears its stored token, so
