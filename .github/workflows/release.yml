@@ -61,7 +61,7 @@ jobs:
         run: powershell -ExecutionPolicy Bypass -File scripts\build.ps1
 
       - name: Keep the build as a workflow artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: colab-idle-guard-release
           path: release/*
